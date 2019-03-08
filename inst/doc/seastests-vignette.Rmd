@@ -1,0 +1,83 @@
+---
+title: "seastests - Seasonality tests"
+author: "Daniel Ollech"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Seasonality tests
+Different authors have developed a multiplicity of test for seasonality of a given time series. In Ollech and Webel (forthcoming) and Webel and Ollech (forthcoming) we analysed many of these tests and showed a) which tests are the most reliable ones and b) how to combine a small set of tests, to reduce the misclassification rates of the single tests.
+
+
+## To get started
+
+We'll simulated simple non-seasonal and a seasonal series.
+```{r}
+set.seed(5)
+x1 = 1:96/20 + ts(rnorm(96, 100, 1), start=c(2015,1), frequency=12)
+x2 = 1:96/20 + ts(rnorm(96, 100, 1) + ts(sin((2*pi*rep(1:12, 8))/12), frequency=12), start=c(2015,1), frequency=12)
+
+ts.plot(x1,x2, col=c("darkblue", "darkred"), main="Some simple seasonal series")
+legend("topleft", c("Non seasonal series", "Seasonal series"), col=c("darkblue", "darkred"), lty=1)
+
+```
+
+Then, we can test, whether these series are seasonal or not, using the WO-test, i.e. the overall seasonality test developed in Webel and Ollech (2019).
+
+```{r}
+library(seastests)
+print("Testing the non-seasonal series")
+summary(wo(x1))
+print("")
+print("Testing the seasonal series")
+summary(wo(x2))
+```
+
+The WO-test gives out a TRUE if the series is seasonal and FALSE otherwise. The p-values indicate the p-values of the underlying test, i.e. the QS-test, the QS-R test and the KW-R-test.
+
+If we are only interested in knowing, whether a series is seasonal or not, e.g. for further use in our analysis, the function *isSeasonal()* can be called.
+
+```{r}
+print("Test using the non-seasonal series")
+isSeasonal(x1)
+print("Test using the seasonal series")
+isSeasonal(x2)
+```
+
+This can then for example be used in the forecast packages *auto.arima()* function.
+For the non-seasonal series:
+
+```{r}
+if (!require("forecast")) install.packages("forecast")
+
+mod1 <- auto.arima(x1, seasonal=isSeasonal(x1))
+summary(mod1)
+plot(forecast(mod1, h=12))
+
+```
+
+and for the seasonal series:
+
+```{r}
+mod2 <- auto.arima(x2, seasonal=isSeasonal(x2))
+summary(mod2)
+plot(forecast(mod2, h=12))
+
+```
+
+
+## References
+Ollech, Daniel and Webel, Karsten (forthcoming). A random forest-based approach to identifying the most informative seasonality tests. Bundesbank Discussion Paper 
+Webel, Karsten and Ollech, Daniel (forthcoming). An overall seasonality test. Bundesbank Discussion Paper 
+

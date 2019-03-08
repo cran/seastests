@@ -1,0 +1,19 @@
+Package: seastests
+Title: Seasonality Tests
+Version: 0.14.2
+Authors@R: person('Daniel', 'Ollech', email = 'daniel.ollech@bundesbank.de', role = c('aut', 'cre'))
+Description: An overall test for seasonality of a given time series in addition to a set of single seasonality tests as used in Ollech and Webel (forthcoming): An overall seasonality test. Bundesbank Discussion Paper.
+Depends: R (>= 3.1.0)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Maintainer: Daniel Ollech <daniel.ollech@bundesbank.de>
+Imports: xts, zoo, forecast, stats, graphics, utils
+RoxygenNote: 6.0.1
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2019-02-06 15:30:53 UTC; s3504do
+Author: Daniel Ollech [aut, cre]
+Repository: CRAN
+Date/Publication: 2019-03-08 17:20:02 UTC

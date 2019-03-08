@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Daniel Ollech" />
+
+<meta name="date" content="2019-02-06" />
+
+<title>seastests - Seasonality tests</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">seastests - Seasonality tests</h1>
+<h4 class="author"><em>Daniel Ollech</em></h4>
+<h4 class="date"><em>2019-02-06</em></h4>
+
+
+
+<div id="seasonality-tests" class="section level2">
+<h2>Seasonality tests</h2>
+<p>Different authors have developed a multiplicity of test for seasonality of a given time series. In Ollech and Webel (forthcoming) and Webel and Ollech (forthcoming) we analysed many of these tests and showed a) which tests are the most reliable ones and b) how to combine a small set of tests, to reduce the misclassification rates of the single tests.</p>
+</div>
+<div id="to-get-started" class="section level2">
+<h2>To get started</h2>
+<p>We’ll simulated simple non-seasonal and a seasonal series.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">5</span>)
+x1 =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">96</span><span class="op">/</span><span class="dv">20</span> <span class="op">+</span><span class="st"> </span><span class="kw">ts</span>(<span class="kw">rnorm</span>(<span class="dv">96</span>, <span class="dv">100</span>, <span class="dv">1</span>), <span class="dt">start=</span><span class="kw">c</span>(<span class="dv">2015</span>,<span class="dv">1</span>), <span class="dt">frequency=</span><span class="dv">12</span>)
+x2 =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">96</span><span class="op">/</span><span class="dv">20</span> <span class="op">+</span><span class="st"> </span><span class="kw">ts</span>(<span class="kw">rnorm</span>(<span class="dv">96</span>, <span class="dv">100</span>, <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ts</span>(<span class="kw">sin</span>((<span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dv">8</span>))<span class="op">/</span><span class="dv">12</span>), <span class="dt">frequency=</span><span class="dv">12</span>), <span class="dt">start=</span><span class="kw">c</span>(<span class="dv">2015</span>,<span class="dv">1</span>), <span class="dt">frequency=</span><span class="dv">12</span>)
+
+<span class="kw">ts.plot</span>(x1,x2, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;darkblue&quot;</span>, <span class="st">&quot;darkred&quot;</span>), <span class="dt">main=</span><span class="st">&quot;Some simple seasonal series&quot;</span>)
+<span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;Non seasonal series&quot;</span>, <span class="st">&quot;Seasonal series&quot;</span>), <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;darkblue&quot;</span>, <span class="st">&quot;darkred&quot;</span>), <span class="dt">lty=</span><span class="dv">1</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Then, we can test, whether these series are seasonal or not, using the WO-test, i.e. the overall seasonality test developed in Webel and Ollech (2019).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(seastests)
+<span class="kw">print</span>(<span class="st">&quot;Testing the non-seasonal series&quot;</span>)
+<span class="co">#&gt; [1] &quot;Testing the non-seasonal series&quot;</span>
+<span class="kw">summary</span>(<span class="kw">wo</span>(x1))
+<span class="co">#&gt; Test used:  WO </span>
+<span class="co">#&gt;  </span>
+<span class="co">#&gt; Test statistic:  0 </span>
+<span class="co">#&gt; P-value:  1 1 0.179945 </span>
+<span class="co">#&gt;  </span>
+<span class="co">#&gt; The WO - test does not identify  seasonality</span>
+<span class="kw">print</span>(<span class="st">&quot;&quot;</span>)
+<span class="co">#&gt; [1] &quot;&quot;</span>
+<span class="kw">print</span>(<span class="st">&quot;Testing the seasonal series&quot;</span>)
+<span class="co">#&gt; [1] &quot;Testing the seasonal series&quot;</span>
+<span class="kw">summary</span>(<span class="kw">wo</span>(x2))
+<span class="co">#&gt; Test used:  WO </span>
+<span class="co">#&gt;  </span>
+<span class="co">#&gt; Test statistic:  1 </span>
+<span class="co">#&gt; P-value:  1 0.005145348 0.001151393 </span>
+<span class="co">#&gt;  </span>
+<span class="co">#&gt; The WO - test identifies seasonality</span></code></pre></div>
+<p>The WO-test gives out a TRUE if the series is seasonal and FALSE otherwise. The p-values indicate the p-values of the underlying test, i.e. the QS-test, the QS-R test and the KW-R-test.</p>
+<p>If we are only interested in knowing, whether a series is seasonal or not, e.g. for further use in our analysis, the function <em>isSeasonal()</em> can be called.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&quot;Test using the non-seasonal series&quot;</span>)
+<span class="co">#&gt; [1] &quot;Test using the non-seasonal series&quot;</span>
+<span class="kw">isSeasonal</span>(x1)
+<span class="co">#&gt; [1] FALSE</span>
+<span class="kw">print</span>(<span class="st">&quot;Test using the seasonal series&quot;</span>)
+<span class="co">#&gt; [1] &quot;Test using the seasonal series&quot;</span>
+<span class="kw">isSeasonal</span>(x2)
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<p>This can then for example be used in the forecast packages <em>auto.arima()</em> function. For the non-seasonal series:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;forecast&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;forecast&quot;</span>)
+<span class="co">#&gt; Loading required package: forecast</span>
+<span class="co">#&gt; Warning: package 'forecast' was built under R version 3.5.1</span>
+
+mod1 &lt;-<span class="st"> </span><span class="kw">auto.arima</span>(x1, <span class="dt">seasonal=</span><span class="kw">isSeasonal</span>(x1))
+<span class="kw">summary</span>(mod1)
+<span class="co">#&gt; Series: x1 </span>
+<span class="co">#&gt; ARIMA(0,1,1) </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;           ma1</span>
+<span class="co">#&gt;       -0.7597</span>
+<span class="co">#&gt; s.e.   0.0656</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; sigma^2 estimated as 1.085:  log likelihood=-138.6</span>
+<span class="co">#&gt; AIC=281.2   AICc=281.33   BIC=286.31</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Training set error measures:</span>
+<span class="co">#&gt;                     ME     RMSE       MAE       MPE     MAPE      MASE</span>
+<span class="co">#&gt; Training set 0.2288794 1.030769 0.8455547 0.2146113 0.824723 0.6940177</span>
+<span class="co">#&gt;                     ACF1</span>
+<span class="co">#&gt; Training set -0.05882107</span>
+<span class="kw">plot</span>(<span class="kw">forecast</span>(mod1, <span class="dt">h=</span><span class="dv">12</span>))</code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAeFBMVEUAAAAAADoAAGYAAP8AOjoAOpAAZmYAZpAAZrY6AAA6ADo6AGY6OgA6kNtmAABmZgBmZjpmZmZmtv+QOgCQOjqQZgCQtpCQ2/+xtc62ZgC2Zma2/7a2/9u2///bkDrb25Db29/b/9vb////tmb/25D//7b//9v////iqjJYAAAACXBIWXMAAA7DAAAOwwHHb6hkAAALCElEQVR4nO2dC3uzthmGlbTZ7HbOVmftF3cL9YIT/v8/HOgsIfwIMAeb526vfAbEK3Gjk22RiIpcRSxdgLVDQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFAbCgQmieP26Q35+pIKc6+q5XmNIU5/vNK1298fIpCywPfr3Wr45h+mbv0w+d5yEqRX1ya3teQV+vqSClaBUWcTKXbgWJ+rKdIOlAxj2G6ZvrqdPo03ZhyECQ3p5X0CkZpFDX0wNZN+TVOUH1thX0877xXTz9Q2tx6Zs0B51laaVV1WUvAkF2O0eQX3x54kHv/2Mvj3ktxN00mVCdKRU3mZ20Z7tDclL338WzedTXtStlwEIEpSjF07+Ua+VEJn35tIL+9tqU5/T8T10Yl755KavartI/K1tET5Db7ilIV6fmTBND3h1dv07q8EGbUldV2AqoBbkdoSAd2eWhQ7drcN09/LWXDo0g2WNYQX9/qxN/vb78rgW59PVReUhuuF6n3vvft0CQ2e7RxI7y3qoSyFqqAp5cjmVzoH75/KFuzmWvtnf6kE1rd3i3wMTz8mgEHSpbh2w31eSmzRhB8iwr6HCqI172h0IJCtObgvktvtg51eF2P0EnU1FUOzGZmxujDhc2V9n06sLYey8T+DtCQUebRv0j241qPeaaJLKZqLO8Pujg+qBDKZUedUwvvbo7LUFVFQpy270EmRiFy1B1GKqR+FmYgu/Mq4O9eH9HIEjG8/NQVxNck/ZsjTlBO2+YP1z2u+okm+0xTO//vJkg2wepolaq+y+8sdQKMp2eLPfRXmBYA70dbUF+Hh2C7D1x47W6Nieo7n/+9yZ7u2OYflpBHTXoGB2uTAnMxdphy5YoGMf61iBbp22l1v2X3Th+v9VD4sunGsj99LZgYSd9I0FRHxTccXe4tFMM3Qr+/cMcUwm8HW1BUR+UEJSY+jQO/CZ2rE//rd5TaocuvW2YqvZ5M8WbCApHMXNBdSFUR1qaPudoBhVVJFUYeaYcXdyOhKBwFEsIql+ZOaIcLvVY6lcnOejVP0tdaVx6fT/dRNGWIxoWhwkytXXn7dc9in2D4/fMMmUhbIKmw7LzIBs2FOTlkRZkhjvdluwwb2wV2opREKffVbYW7tpCRgpSHd4x2C8z07XBvq1qdjajSNNc5DmqPZ2ErkP+vC8S5PJICpIVwaSru2I7URQ7r5rK2ZjsIMP0n4VLH840Bwt6MMrWG7/T7tr25gTVFeMY7Ljsr25vTlDdAoMa8v0WftASb29PUPozqU62J6gnFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCgnyD9ybiIPrV8ZHoJKuSXo/KLhn4Lwu6YPoLkx7Wl/FKgCJfzPTB9BH291i2rlJ/oljdZ0XkPsAYBhvVB8XcjDwxHMQDnQQAKAvQTZFa1bGYM69tJmyU6Zc8nB+6Y3sO8omuYF3fDFILkRFERTRT757s0kwjKqUE9wi3KJIKatevqRWcftHFBdgl45xuNrQuaO9zNOZ/P6gUFJTlT0BXOCrVBQRFni9qeaB7k5jsdbzZWKuh8nkVQPRFCb8LWKOgconZO1MS+38Dj7SsUdJ5TUFWCj8o2L2jmcLeAggAUFBOVIbDz/v6eTJQdbSyrFvQuSSbKjjaW1Qp6tyQTZUcbyzoFvfskE2VHG8sKBb1HJBNlRxsLBc0bbhAUBKAgwBoFreprn6gQqxA0VbhBUBCAggCeoOYlBcU4QaKioAQUBFCCREVBHVhByhEFxVAQKkIk6KcInSo73I1LtyTajC+oqmI/MwiKfyXRyHC3Iyloxia2+q+ehdKjBIn5BZmFZaurQSZXIRYW1PwG4k8Kuor6PcTrF2RFzT7MF82v2l2jIKEECRH2RfPPgy77n1cmyM0MpaGlBbV/E+G4cOMxjcoJEosKmjFcbqZGUOUL0mWZVRB82mctgsQygvDTPgsIUlZEIKhaRtBcz2r0CyLsf6oi2U56fkFzPe0jki87tvWEUNgJkBFUPU4NumIhR5CbOIfvUhfpgyZ52me4INuwQkFB2llHsWme9rkuSESHRLDp1RcRVBz74jynoGnCiajKJASJaNvPDgm6/xVm3YJEjiDzMh4hAkHOUc+CrlKQ8I4IX5AQkRT/dccQ+gCrXHMEiXC7dV570zDjOumJPnIVcaUIvhrtFtTq2xcXNNHTPsJTJK4JEm47ldUKBE3ztI/wru2aIOEJiof/qlqHoEme9hFeKxP+RlqQGehyBc36vNiNw9mJyxVBZpg3H4IF70zDaJ2Z36ugYGZne2G/T3Lv0QMztiLlZ36PgkSFBIn4fyVIDBBUPaqgqnIyAkGJnFDmdyTI9CveOT0EVQMFVffzmxeGCbJvO4YL6p92EUHCF2T7Y7PPfSVh9wVpqg0LMoN8cCgpKJUTBQFBty9on4Q3DOfmNt4pvQSJ0QVfvyD7LYR/ZihI+GcE0ceXemZBya99ukKLSs9lrgsSjyQoGe6qINtMugWJzQgSqTT6E562INM9XfsWcouCTHXyOuSNCjICsKC8bIZBQYClBQWjdFJQ1SUop2APIih9rZmCsrIZzroEic4k0Vxnm4Ki772AoJlYgaDwg2WX4KEFZS/i7BYU9TmBoPn8TCQofxFnhqD40AMIyl+CJ7YpqHsRZxxuo4JG1iCRyE88lKD8RZxtQQIPU6M/Ru3DRKNY7iJOX5C1gz4ofQRBueEoCIRLCIo/RU2de/+CcieK7nkA0zVvQ1D2RNFbwmMFCaTg/gX1GOZjQaLCgq6sgLo9M08U4699nCDdD+UJ6lGWsSxfg2TtEU5QtQFBPSaK9tubPoLmZNmJop70uOCbEZQZzghq76cg85OCroVrCzKHKcj87BB029xGMNE8KPNpn60Kyn7ap/Nt+6ML6vG0z0YF5T/ts1VB2eEoaFA4CqKgecNNBwUBKAhAQYDFBN0NCwkakc2akgxOPZg1XT0FjU8yOPVg1nT1FDQ+yeDUg1nT1VPQ+CSDUw9mTVdPQeOTDE69QSgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBBgGkHyoRe5lLoU4umH2nn5Va6+uuyFAKuMOqMk446IUnPqXNKsmETQ91tdkKLRUNYvSnUlX69yeVpZF+jrNcdQO0oy7ogoTXG613wrJhGk/kJb8fyhHl447WRJ5LpGtadAS/nSUVJxR0Sp5LLLJQQp6rvlylKKg3wA5vJLXsNIR+nYMzBKs/ny+3KCTs8fSod+NEj+Uz7/51V0PemREyW1Z2AUebsW6YMkzQMv6jbpzkKWrWgaGlwLeiVKYs/QKLK9LyaoNP1iJOip171PRGntGRxFPtS1lCD1wFS7iak+4Mrf2QRREnHHRVlIUOH/Td8i6IM+quyuuh0lFXdwlEKvhLl6s6YRZJ68C4Zj6UY91pl379tRknEHR5EsUoMuezNM+RM6ZaVp996znb2ipOMOj9KwiCBdd5sLKNxbAtMVicxhvh0lHXdElGqxPuhxoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQ4P+rXQF5OxJNCwAAAABJRU5ErkJggg==" /><!-- --></p>
+<p>and for the seasonal series:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod2 &lt;-<span class="st"> </span><span class="kw">auto.arima</span>(x2, <span class="dt">seasonal=</span><span class="kw">isSeasonal</span>(x2))
+<span class="kw">summary</span>(mod2)
+<span class="co">#&gt; Series: x2 </span>
+<span class="co">#&gt; ARIMA(0,1,1)(1,0,0)[12] </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;           ma1    sar1</span>
+<span class="co">#&gt;       -0.8642  0.3531</span>
+<span class="co">#&gt; s.e.   0.0502  0.1052</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; sigma^2 estimated as 1.585:  log likelihood=-157.09</span>
+<span class="co">#&gt; AIC=320.17   AICc=320.43   BIC=327.83</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Training set error measures:</span>
+<span class="co">#&gt;                     ME     RMSE       MAE       MPE      MAPE     MASE</span>
+<span class="co">#&gt; Training set 0.2134882 1.239136 0.9547015 0.1950671 0.9304067 0.777594</span>
+<span class="co">#&gt;                    ACF1</span>
+<span class="co">#&gt; Training set 0.03000515</span>
+<span class="kw">plot</span>(<span class="kw">forecast</span>(mod2, <span class="dt">h=</span><span class="dv">12</span>))</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>Ollech, Daniel and Webel, Karsten (forthcoming). A random forest-based approach to identifying the most informative seasonality tests. Bundesbank Discussion Paper Webel, Karsten and Ollech, Daniel (forthcoming). An overall seasonality test. Bundesbank Discussion Paper</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
