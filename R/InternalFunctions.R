@@ -1,5 +1,8 @@
-#' Internatl functions
+#' Internal functions
 #' 
+#' Get lag
+#' @param x time series
+#' @param k number of lags
 #' Functions used internally in the seasonality package
 #' @author Daniel Ollech
 #' @export
@@ -10,6 +13,16 @@
   y <- stats::ts(y, start=stats::start(x), frequency=stats::frequency(x))
   return(y)
 }
+
+#' Internal functions
+#' 
+#' Get differenced series
+#' @param x time series
+#' @param lag which lag
+#' @param ... further parameters given to diff()
+#' Functions used internally in the seasonality package
+#' @author Daniel Ollech
+#' @export
 
 .Diff <- function(x,lag=1, ...) {
   y <- c(rep(NA, lag) , diff(x,lag=lag, ...))

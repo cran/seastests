@@ -4,7 +4,7 @@
 \alias{isSeasonal}
 \title{Testing the seasonality of series}
 \usage{
-isSeasonal(x, test = "wo", freq = NA)
+isSeasonal(x, test = "combined", freq = NA)
 }
 \arguments{
 \item{x}{time series}
@@ -17,7 +17,7 @@ isSeasonal(x, test = "wo", freq = NA)
 Using a user-chosen seasonality test, the seasonality of a time series is assessed and a boolean value is returned.
 }
 \details{
-By default, the WO-test is used to assess the seasonality of a time series and returns a boolean. Alternatively, the QS test (test='qs'), Friedman test (test='fried'), Kruskall-Wallis (test='kw'), F-test on seasonal dummies (test='seasdum') or the Welch test (test='welch') can be used.
+By default, the combined-test is used to assess the seasonality of a time series and returns a boolean. Alternatively, the QS test (test='qs'), Friedman test (test='fried'), Kruskall-Wallis (test='kw'), F-test on seasonal dummies (test='seasdum') or the Welch test (test='welch') can be used.
 }
 \examples{
 isSeasonal(ts(rnorm(120, 10,10), frequency=12))

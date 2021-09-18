@@ -33,6 +33,8 @@ qs(ts(rnorm(1200, 10,10), frequency=7))
 Hyndman, R. J. and Y. Khandakar (2008). Automatic Time Series Forecasting: The forecast Package for R. Journal of Statistical Software 27 (3), 1-22.
 
 Maravall, A. (2011). Seasonality Tests and Automatic Model Identification in TRAMO-SEATS. Bank of Spain.
+
+Ollech, D. and Webel, K. (2020). A random forest-based approach to identifying the most informative seasonality tests. Deutsche Bundesbank's Discussion Paper series 55/2020.
 }
 \author{
 Daniel Ollech

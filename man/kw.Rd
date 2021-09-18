@@ -32,7 +32,9 @@ kw(ts(rnorm(1200, 10,10), frequency=7))
 \references{
 Hyndman, R. J. and Y. Khandakar (2008). Automatic Time Series Forecasting: The forecast Package for R. Journal of Statistical Software 27 (3), 1-22.
 
-Kruskal, W. H. and W. A.Wallis (1952). Use of Ranks in One-Criterion Variance Analysis. Journal of the American Statistical Association 47 (260), 583-621.
+Kruskal, W. H. and W. A. Wallis (1952). Use of Ranks in One-Criterion Variance Analysis. Journal of the American Statistical Association 47 (260), 583-621.
+
+Ollech, D. and Webel, K. (2020). A random forest-based approach to identifying the most informative seasonality tests. Deutsche Bundesbank's Discussion Paper series 55/2020.
 }
 \author{
 Daniel Ollech

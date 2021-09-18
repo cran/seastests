@@ -7,6 +7,7 @@
 #' @details A RegARIMA model is estimated with (0,1,1)+Seasonal dummies if autoarima=FALSE (default) or (p,d,q)+Seasonal dummies if autoarima=TRUE, (p,d,q) selected by Hyndman-Khandakar algorithm with max(p)=max(q) <= 3. Then the tests checks whether the seasonal dummies are jointly different from zero, i.e. whether deterministic seasonality can be detected in the time series.
 #' @references Hyndman, R. J. and Y. Khandakar (2008). Automatic Time Series Forecasting: The forecast Package for R. Journal of Statistical Software 27 (3), 1-22.
 #' @references Maravall, A. (2011). Seasonality Tests and Automatic Model Identification in TRAMO-SEATS. Bank of Spain. 
+#' @references Ollech, D. and Webel, K. (2020). A random forest-based approach to identifying the most informative seasonality tests. Deutsche Bundesbank's Discussion Paper series 55/2020.
 #' @author Daniel Ollech
 #' @examples seasdum(ts(rnorm(120, 10,10), frequency=12))
 #' seasdum(ts(rnorm(70, 10,10), frequency=7))
@@ -19,6 +20,7 @@ seasdum <- function(x, freq=NA, autoarima=FALSE) {
       if (any(class(x)=="xts")) {freq <- freq_xts(x)} else {
         stop("Do not know the frequency of the time series.")
       }}}
+  if(freq<2){stop(paste("The number of observations per cycle (usually years) is", freq, "and thus too small."))}
   
   .seasonaldummies <- function(x) {
     dummies = c(1,rep(c(rep(0,(freq-1)),1), length(x)))[1:((freq-1)*length(x))]

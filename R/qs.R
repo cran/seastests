@@ -10,6 +10,7 @@
 #' @details If residuals=TRUE, a non-seasonal ARIMA model is estimated for the time series. And the residuals of the fitted model are used as input to the test statistic. If an automatic order selection is used, the Hyndman-Khandakar algorithm is employed with max(p)=max(q) <= 3.
 #' @references Hyndman, R. J. and Y. Khandakar (2008). Automatic Time Series Forecasting: The forecast Package for R. Journal of Statistical Software 27 (3), 1-22.
 #' @references Maravall, A. (2011). Seasonality Tests and Automatic Model Identification in TRAMO-SEATS. Bank of Spain. 
+#' @references Ollech, D. and Webel, K. (2020). A random forest-based approach to identifying the most informative seasonality tests. Deutsche Bundesbank's Discussion Paper series 55/2020.
 #' @author Daniel Ollech
 #' @examples qs(ts(rnorm(120, 10,10), frequency=12))
 #' qs(ts(rnorm(1200, 10,10), frequency=7))
@@ -18,12 +19,15 @@
 
 qs <- function(x, freq=NA, diff=T, residuals=F, autoarima=T) {
   
+  if (all(is.na(x))) {warning("All observations are NA"); return(list(stat=NA, Pval=NA, test="QS", model=NA))}
+  
   # Frequency of time series
   if(is.na(freq)) {
     if (any(class(x)=="ts")) {freq <- stats::frequency(x)} else {
     if (any(class(x)=="xts")) {freq <- freq_xts(x)} else {
       stop("Do not know the frequency of the time series.")
     }}}
+  if(freq<2){stop(paste("The number of observations per cycle (usually years) is", freq, "and thus too small."))}
   
   # Transformations
   if (diff & residuals) {warning("The differences of the residuals of a non-seasonal ARIMA model are computed and used. It may be better to either only take the differences or use the residuals.")}
@@ -42,6 +46,9 @@ qs <- function(x, freq=NA, diff=T, residuals=F, autoarima=T) {
       x <- stats::resid(model)}}} else {model=NA}
   
   if (diff) {y <- diff(x)} else {y <- x}
+ 
+  # Pre-check
+  if (stats::var(y, na.rm=TRUE)==0) {stop("Series is a constant (possibly after transformations). QS-test cannot be computed on constants.")}
   
   # Test statistic
   rho <- stats::acf(as.numeric(y)[stats::complete.cases(as.numeric(y))], lag.max = freq*2, plot=F)$acf[-1,,][c(freq, 2*freq)]

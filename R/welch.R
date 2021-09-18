@@ -26,6 +26,7 @@ welch <- function(x, freq=NA, diff=T, residuals=F, autoarima=T, rank=F) {
       if (any(class(x)=="xts")) {freq <- freq_xts(x)} else {
         stop("Do not know the frequency of the time series.")
       }}}
+  if(freq<2){stop(paste("The number of observations per cycle (usually years) is", freq, "and thus too small."))}
   
   # Transformations
   if (diff & residuals) {warning("The differences of the residuals of a non-seasonal ARIMA model are computed and used. It may be better to either only take the differences or use the residuals.")}

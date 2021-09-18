@@ -4,8 +4,14 @@
 \alias{ocsb}
 \title{OCSB test}
 \usage{
-ocsb(x, method = "OLS", augmentations = c(3, 0), freq = NA, nrun = 1000,
-  seed = 123)
+ocsb(
+  x,
+  method = "OLS",
+  augmentations = c(3, 0),
+  freq = NA,
+  nrun = 1000,
+  seed = 123
+)
 }
 \arguments{
 \item{x}{time series}
